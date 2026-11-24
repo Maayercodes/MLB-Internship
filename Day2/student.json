@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Maayer Hassan",
+        "age": 22,
+        "grade": "A+",
+        "course": "Artificial Intelligence"
+    },
+    {
+        "name": "Minhaj",
+        "age": 21,
+        "grade": "B",
+        "course": "Data Science"
+    }
+]

@@ -1,0 +1,3 @@
+My name is Maayer.
+I am learning python.
+I am enjoying the learning process.

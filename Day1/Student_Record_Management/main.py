@@ -1,8 +1,21 @@
-# version 1 (Student Record Management System)
-students = []
+
+import json
+
+# Load Existing Student Records
+try:
+    file = open("students.json", "r")
+    students = json.load(file)
+    file.close()
+
+except FileNotFoundError:
+    students = []
+
+except json.JSONDecodeError:
+    students = []
+
 
 while True:
-    print("------ STUDENT RECORD MANAGEMENT SYSTEM ------")
+    print("\n------ STUDENT RECORD MANAGEMENT SYSTEM ------")
     print("1. Add Student")
     print("2. View All Students")
     print("3. Search Student")
@@ -18,10 +31,16 @@ while True:
 
         name = input("Enter student name: ")
         roll_no = input("Enter roll number: ")
-        age = input("Enter age: ")
+
+        try:
+            age = int(input("Enter age: "))
+        except ValueError:
+            print("Invalid age! Please enter a number.")
+            continue
+
         course = input("Enter course: ")
 
-        if name == "" or roll_no == "" or age == "" or course == "":
+        if name == "" or roll_no == "" or course == "":
             print("All fields are required!")
 
         else:
@@ -44,15 +63,21 @@ while True:
 
                 students += [student]
 
+                file = open("students.json", "w")
+                json.dump(students, file, indent=4)
+                file.close()
+
                 print("Student added successfully!")
 
     # 2. View All Students
     elif choice == "2":
 
         if students == []:
-            print("No student records found!")
+            print("No student records found! Please add a student first.")
 
         else:
+            print("\n------ ALL STUDENTS ------")
+
             for student in students:
                 print("\n----------------------")
                 print("Name:", student["name"])
@@ -71,15 +96,17 @@ while True:
             if student["roll_no"] == search_roll:
 
                 print("\nStudent Found!")
+                print("----------------------")
                 print("Name:", student["name"])
                 print("Roll Number:", student["roll_no"])
                 print("Age:", student["age"])
                 print("Course:", student["course"])
 
                 found = True
+                break
 
         if not found:
-            print("Student not found!")
+            print("Student not found! Please check the roll number.")
 
     # 4. Update Student
     elif choice == "4":
@@ -102,8 +129,13 @@ while True:
                     print("Name updated successfully!")
 
                 elif update_choice == "2":
-                    student["age"] = input("Enter new age: ")
-                    print("Age updated successfully!")
+
+                    try:
+                        student["age"] = int(input("Enter new age: "))
+                        print("Age updated successfully!")
+
+                    except ValueError:
+                        print("Invalid age! Please enter a number.")
 
                 elif update_choice == "3":
                     student["course"] = input("Enter new course: ")
@@ -112,7 +144,12 @@ while True:
                 else:
                     print("Invalid choice!")
 
+                file = open("students.json", "w")
+                json.dump(students, file, indent=4)
+                file.close()
+
                 found = True
+                break
 
         if not found:
             print("Student not found!")
@@ -135,10 +172,15 @@ while True:
 
         if found:
             students = updated_students
+
+            file = open("students.json", "w")
+            json.dump(students, file, indent=4)
+            file.close()
+
             print("Student deleted successfully!")
 
         else:
-            print("Student not found!")
+            print("Student not found! No record was deleted.")
 
     # 6. Total Students
     elif choice == "6":
